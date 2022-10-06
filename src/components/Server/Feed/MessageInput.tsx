@@ -6,6 +6,10 @@ interface MessageInputProps {
     onSubmit(e: any): void;
 }
 
+export interface MessageInputFormValues {
+    message: string;
+}
+
 const MessageInput = ({
     onSubmit
 }: MessageInputProps) => {
@@ -14,7 +18,7 @@ const MessageInput = ({
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm();
+    } = useForm<MessageInputFormValues>();
 
     function onMessageSubmit(e: React.KeyboardEvent) {
         if (e.key === "Enter" && !e.shiftKey) {

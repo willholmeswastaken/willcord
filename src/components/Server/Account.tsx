@@ -12,6 +12,7 @@ interface Test {
 
 const Account = () => {
     const user = useContext(AuthContext);
+    const username: string = user?.user_metadata?.full_name;
     async function signout() {
         const { error } = await supabaseClient.auth.signOut();
     }
@@ -22,7 +23,7 @@ const Account = () => {
                 <div className="text-gray-800">
                     <AvatarWithStatus user={user!} />
                 </div>
-                <div className="text-white font-semibold text-sm">devwillholmes</div>
+                <div className="text-white font-semibold text-sm">{username}</div>
             </div>
             <Menu as="div" className="relative flex items-center">
                 <Menu.Button>

@@ -6,13 +6,13 @@ import { AuthContext } from '../../../Auth/AuthProvider';
 import supabaseClient from '../../../supabaseClient';
 import { Message } from '../../../types/Message';
 import MessageRow from '../MessageRow';
-import MessageInput from './MessageInput';
+import MessageInput, { MessageInputFormValues } from './MessageInput';
 
 const Feed = () => {
     const { channel } = useParams();
     const user = useContext(AuthContext);
 
-    const { data } = useQuery([channel, "messages"], async () => {
+    const { data: messages } = useQuery([channel, "messages"], async () => {
         const { data, error } = await supabaseClient
             .from<Message>("Message")
             .select("*")
@@ -20,11 +20,11 @@ const Feed = () => {
         return data;
     });
 
-    const mutation = useMutation(
+    const sendMessageMutation = useMutation(
         async (message: string) => {
             const { data, error } = await supabaseClient
                 .from("Message")
-                .insert([{ content: message, channel_id: channel, user_id: user?.id }]);
+                .insert([{ content: message, channel_id: channel, user_id: user?.id, user_image: user?.user_metadata?.picture, username: user?.user_metadata?.full_name }]);
             return data;
         },
         {
@@ -32,17 +32,17 @@ const Feed = () => {
         }
     );
 
-    function onSubmit(data: any) {
-        mutation.mutate(data.message);
-        // console.log(data);
-        // setFeed((prevFeed) => [...prevFeed, data.message]);
+    function onSubmit(data: MessageInputFormValues) {
+        sendMessageMutation.mutate(data.message);
     }
+
+    console.log(messages);
 
     return (
         <div className="flex flex-col h-full overflow-hidden pb-4">
             <div className="flex-1 overflow-y-auto flex flex-col gap-4 my-4 pr-4">
-                {data?.map((message) => (
-                    <MessageRow text={message.content} key={message.id} />
+                {messages?.map((message) => (
+                    <MessageRow username={message.username} content={message.content} sentAt={message.created_at} userImage={message.user_image} key={message.id} />
                 ))}
             </div>
             <MessageInput onSubmit={onSubmit} />
