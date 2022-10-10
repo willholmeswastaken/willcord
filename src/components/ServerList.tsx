@@ -2,22 +2,20 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom';
 import supabaseClient from '../supabaseClient'
 import { Server } from '../types/Server';
+import ServerItem from './Server/ServerItem';
 
 const ServerList = () => {
-    const { data } = useQuery(['servers'], async () => {
-        const { data } = await supabaseClient.from('Server').select('*');
+    const { data: servers } = useQuery(['servers'], async () => {
+        const { data } = await supabaseClient.from<Server>('Server').select('*');
         return data;
     });
+
     return (
-        <div className='flex flex-col flex-shrink-0 items-center gap-4 p-4 h-screen overflow-y-auto bg-gray-900'>
+        <div className='flex flex-col flex-shrink-0 items-center gap-4 py-4 h-screen overflow-y-auto bg-primary'>
             <Link to='/' className='w-12 h-12 rounded-[24px] transition-all hover:rounded-xl bg-indigo-400' />
-            <div className="flex flex-col gap-4 bg-gray-800 rounded-full">
-                {data?.map(x => (
-                    <Link
-                        key={x.id}
-                        to={`/${x.id}`}
-                        className="w-12 h-12 rounded-[24px] transition-all hover:rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
-                    ></Link>
+            <div className="flex flex-col gap-4 bg-primary rounded-full pr-2">
+                {servers?.map(server => (
+                    <ServerItem server={server} />
                 ))}
             </div>
         </div>

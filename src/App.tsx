@@ -5,8 +5,8 @@ import AuthProvider from './Auth/AuthProvider';
 import SignIn from './Auth/SignIn';
 import ServerList from './components/ServerList';
 import Home from './components/Home';
-import Sidebar from './components/Server/Sidebar';
-import Channel from './components/Server/Channel';
+import ServerView from './components/Server/ServerView';
+import ChannelDisplay from './components/Server/Channel';
 
 export const queryClient = new QueryClient();
 
@@ -45,9 +45,9 @@ function SignedIn() {
       <ServerList />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path=":server" element={<Sidebar />}>
+        <Route path=":server" element={<ServerView />}>
           {/* <Route index element={<Navigate to={`/${lastSeenChannel}`} />} /> */}
-          <Route path=":channel" element={<Channel />} />
+          <Route path=":channel" element={<ChannelDisplay />} />
         </Route>
       </Routes>
     </div>

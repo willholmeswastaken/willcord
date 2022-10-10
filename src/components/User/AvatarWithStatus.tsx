@@ -10,7 +10,7 @@ interface Props {
 
 export function AvatarWithStatus({ size = 36, name, user }: Props) {
     const userData = user?.user_metadata;
-    console.log(user);
+    console.log(userData);
 
     return (
         <div className="relative inline" style={{ height: size, width: size }}>

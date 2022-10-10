@@ -13,8 +13,9 @@ interface Test {
 const Account = () => {
     const user = useContext(AuthContext);
     const username: string = user?.user_metadata?.full_name;
-    async function signout() {
-        const { error } = await supabaseClient.auth.signOut();
+
+    const signOut = async () => {
+        await supabaseClient.auth.signOut();
     }
 
     return (
@@ -29,13 +30,13 @@ const Account = () => {
                 <Menu.Button>
                     <CogIcon className="h-5 w-5 text-white" aria-hidden="true" />
                 </Menu.Button>
-                <Menu.Items className="absolute origin-bottom-right right-0 bottom-0 mb-8 w-36 rounded-md bg-gray-700 shadow-lg ">
+                <Menu.Items className="absolute origin-bottom-right right-0 bottom-0 mb-8 w-36 rounded-md bg-black shadow-lg ">
                     <Menu.Item>
                         {({ active }: Test) => (
                             <button
-                                onClick={signout}
+                                onClick={signOut}
                                 className={clsx(
-                                    active && "bg-gray-800/50",
+                                    active && "bg-primary",
                                     "group flex text-white w-full items-center rounded-md px-2 py-2 text-sm"
                                 )}
                             >

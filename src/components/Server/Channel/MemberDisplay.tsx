@@ -1,7 +1,7 @@
 import { offset, shift, useFloating } from "@floating-ui/react-dom";
 import { Popover } from "@headlessui/react";
-import { AvatarWithStatus } from "./AvatarWithStatus";
-import UserDisplay from "./UserDisplay";
+import { AvatarWithStatus } from "../../User/AvatarWithStatus";
+import UserDisplay from "../../User/UserDisplay";
 
 const MemberCard = () => {
   const { x, y, reference, floating, strategy } = useFloating({

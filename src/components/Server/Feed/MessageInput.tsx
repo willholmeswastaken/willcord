@@ -1,6 +1,8 @@
 import React from 'react'
 import { useForm } from "react-hook-form";
 import { PaperClipIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useAtom } from 'jotai';
+import { lastSeenChannelAtom } from '../../../atoms';
 
 interface MessageInputProps {
     onSubmit(e: any): void;
@@ -19,6 +21,7 @@ const MessageInput = ({
         reset,
         formState: { errors },
     } = useForm<MessageInputFormValues>();
+    const [currentChannel] = useAtom(lastSeenChannelAtom);
 
     function onMessageSubmit(e: React.KeyboardEvent) {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -29,8 +32,8 @@ const MessageInput = ({
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="relative">
-            <div className="flex rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
-                <div className="bg-gray-600 flex items-center justify-center pl-4">
+            <div className="flex rounded-lg shadow-sm overflow-hidden bg-[#40444b]">
+                <div className="bg-[#40444b] flex items-center justify-center pl-4">
                     <button
                         type="button"
                         className="-m-2.5 w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500"
@@ -41,18 +44,18 @@ const MessageInput = ({
                 </div>
 
                 <label htmlFor="message" className="sr-only">
-                    Message #channel
+                    Message #{currentChannel?.name}
                 </label>
                 <textarea
                     {...register("message")}
                     rows={1}
                     onKeyDown={onMessageSubmit}
-                    className="block w-full py-3 px-4 resize-none bg-gray-600 caret-white text-white"
-                    placeholder="Message #channel"
+                    className="block w-full py-3 px-4 resize-none bg-[#40444b] caret-white text-white focus:outline-none"
+                    placeholder={`Message #${currentChannel?.name}`}
                     defaultValue={""}
                 />
 
-                <div className="bg-gray-600 flex items-center justify-center pr-4">
+                <div className="flex items-center justify-center pr-4">
                     <button
                         type="button"
                         className="-m-2.5 w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500"

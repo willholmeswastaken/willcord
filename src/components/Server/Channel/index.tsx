@@ -1,32 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import supabaseClient from "../../../supabaseClient";
-import MemberDisplay from "../../User/MemberDisplay";
+import MemberDisplay from "./MemberDisplay";
 import Feed from "../Feed";
 import ChannelTitle from "./ChannelTitle";
+import { lastSeenChannelAtom } from "../../../atoms";
+import { Channel } from '../../../types/Channel';
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
-const Channel = () => {
-    let { server, channel } = useParams();
+const ChannelDisplay = () => {
+    const { channel } = useParams();
+    const [currentChannel, setCurrentChannel] = useAtom(lastSeenChannelAtom);
 
-    const { data } = useQuery([server, channel], async () => {
+    const { data: dbChannel } = useQuery([channel, 'channel-full'], async () => {
         const { data } = await supabaseClient
-            .from("Message")
+            .from<Channel>("Channel")
             .select("*")
-            .eq("id", channel!);
+            .eq("id", channel!).single();
 
         return data;
     });
 
-    console.log({ data });
+    useEffect(() => {
+        if (dbChannel && dbChannel.id !== currentChannel?.id)
+            setCurrentChannel(dbChannel);
+    }, [dbChannel, currentChannel]);
 
     return (
-        <div className="bg-gray-700 w-full h-screen flex flex-col">
-            <ChannelTitle />
+        <div className="bg-tertiary w-full h-screen flex flex-col">
+            <ChannelTitle title={currentChannel?.name} />
             <div className="flex flex-1 overflow-hidden">
                 <div className="flex-1 px-4">
                     <Feed />
                 </div>
-                <div className="w-48 bg-gray-800 py-6 px-4">
+                <div className="w-48 bg-secondary py-6 px-4">
                     <div className="flex flex-col gap-2">
                         <MemberDisplay />
                     </div>
@@ -36,4 +44,4 @@ const Channel = () => {
     );
 }
 
-export default Channel;
+export default ChannelDisplay;
