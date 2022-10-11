@@ -22,7 +22,7 @@ const Account = () => {
         <>
             <div className="flex items-center gap-2">
                 <div className="text-gray-800">
-                    <AvatarWithStatus user={user!} />
+                    <AvatarWithStatus userImage={user!.user_metadata.picture} />
                 </div>
                 <div className="text-white font-semibold text-sm">{username}</div>
             </div>

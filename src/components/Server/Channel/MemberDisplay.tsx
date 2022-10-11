@@ -3,7 +3,12 @@ import { Popover } from "@headlessui/react";
 import { AvatarWithStatus } from "../../User/AvatarWithStatus";
 import UserDisplay from "../../User/UserDisplay";
 
-const MemberCard = () => {
+interface MemberCardProps {
+  username: string;
+  userImage: string;
+}
+
+const MemberCard = ({ username, userImage }: MemberCardProps) => {
   const { x, y, reference, floating, strategy } = useFloating({
     placement: "left-start",
     strategy: "fixed",
@@ -15,9 +20,9 @@ const MemberCard = () => {
       <Popover.Button ref={reference}>
         <div className="flex items-center gap-2 relative">
           <div className="text-gray-700">
-            <AvatarWithStatus />
+            <AvatarWithStatus userImage={userImage} />
           </div>
-          <div className="text-[#C20D90] font-semibold">devwillholmes</div>
+          <div className="text-[#C20D90] font-semibold">{username}</div>
         </div>
       </Popover.Button>
 

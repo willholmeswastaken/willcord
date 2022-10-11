@@ -24,7 +24,7 @@ const ServerItem = ({ server }: ServerItemProps) => {
 
     return (
         <div className='flex flex-row' onMouseOver={onServerHover} onMouseOut={onServerHoverGone}>
-            <div className={`h-8 w-1 mt-2 mr-2 rounded-xl hover:bg-white ${isServerCurrent ? 'bg-white animate-bounce' : ''} duration-500 transition-colors`}></div>
+            <div className={`h-8 w-1 mt-2 mr-2 rounded-xl hover:bg-white ${isServerCurrent ? 'bg-white animate-bounce' : ''} duration-300 transition-colors`}></div>
             <Link
                 key={server.id}
                 to={`/${server.id}`}

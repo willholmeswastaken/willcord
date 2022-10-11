@@ -5,20 +5,17 @@ import StatusIcon, { StatusType } from "./StatusIcon";
 interface Props {
     size?: number;
     name?: string;
-    user?: User;
+    userImage?: string;
 }
 
-export function AvatarWithStatus({ size = 36, name, user }: Props) {
-    const userData = user?.user_metadata;
-    console.log(userData);
-
+export function AvatarWithStatus({ size = 36, name, userImage }: Props) {
     return (
         <div className="relative inline" style={{ height: size, width: size }}>
-            {userData?.picture ? (
+            {userImage ? (
                 <img
                     style={{ width: size, height: size }}
                     className="rounded-full"
-                    src={userData.picture}
+                    src={userImage}
                 />
             ) : (
                 <Avatar

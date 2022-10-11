@@ -8,6 +8,7 @@ import { lastSeenChannelAtom } from "../../../atoms";
 import { Channel } from '../../../types/Channel';
 import { useAtom } from "jotai";
 import { useEffect } from "react";
+import UserList from "./UserList";
 
 const ChannelDisplay = () => {
     const { channel } = useParams();
@@ -35,9 +36,7 @@ const ChannelDisplay = () => {
                     <Feed />
                 </div>
                 <div className="w-48 bg-secondary py-6 px-4">
-                    <div className="flex flex-col gap-2">
-                        <MemberDisplay />
-                    </div>
+                    <UserList />
                 </div>
             </div>
         </div>

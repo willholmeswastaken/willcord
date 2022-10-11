@@ -1,12 +1,15 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider, useMutation } from '@tanstack/react-query'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthGate from './Auth/AuthGate';
-import AuthProvider from './Auth/AuthProvider';
+import AuthProvider, { AuthContext } from './Auth/AuthProvider';
 import SignIn from './Auth/SignIn';
 import ServerList from './components/ServerList';
 import Home from './components/Home';
 import ServerView from './components/Server/ServerView';
 import ChannelDisplay from './components/Server/Channel';
+import supabaseClient from './supabaseClient';
+import { useContext, useEffect } from 'react';
+import { WillcordUser } from './types/User';
 
 export const queryClient = new QueryClient();
 
@@ -40,6 +43,24 @@ function App() {
 }
 
 function SignedIn() {
+  // todo: supabase mutation to update the user table with latest image etc
+  const user = useContext(AuthContext);
+  const updateUserMutation = useMutation(
+    async () => {
+      const { data, error } = await supabaseClient
+        .from<WillcordUser>("User")
+        .upsert([{ id: user!.id, username: user!.user_metadata.full_name, user_image: user!.user_metadata.picture, last_seen: new Date() }]);
+      return data;
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(['server-users', "messages"]),
+    }
+  );
+
+  useEffect(() => {
+    updateUserMutation.mutate();
+  }, []);
+
   return (
     <div className="flex">
       <ServerList />

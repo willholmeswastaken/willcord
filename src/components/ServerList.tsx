@@ -15,7 +15,7 @@ const ServerList = () => {
             <Link to='/' className='w-12 h-12 rounded-[24px] transition-all hover:rounded-xl bg-indigo-400' />
             <div className="flex flex-col gap-4 bg-primary rounded-full pr-2">
                 {servers?.map(server => (
-                    <ServerItem server={server} />
+                    <ServerItem key={server.id} server={server} />
                 ))}
             </div>
         </div>

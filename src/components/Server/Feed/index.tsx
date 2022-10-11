@@ -16,7 +16,7 @@ const Feed = () => {
     const { data: messages } = useQuery([channel, "messages"], async () => {
         const { data, error } = await supabaseClient
             .from<Message>("Message")
-            .select("*")
+            .select("*, User( username, user_image )")
             .eq("channel_id", channel!);
         return data;
     });
@@ -29,7 +29,7 @@ const Feed = () => {
         async (message: string) => {
             const { data, error } = await supabaseClient
                 .from("Message")
-                .insert([{ content: message, channel_id: channel, user_id: user?.id, user_image: user?.user_metadata?.picture, username: user?.user_metadata?.full_name }]);
+                .insert([{ content: message, channel_id: channel, user_id: user?.id }]);
             return data;
         },
         {
@@ -45,7 +45,7 @@ const Feed = () => {
         <div className="flex flex-col h-full overflow-hidden pb-4">
             <div className="flex-1 overflow-y-auto flex flex-col gap-4 mb-4 pr-4">
                 {messages?.map((message) => (
-                    <MessageRow username={message.username} content={message.content} sentAt={message.created_at} userImage={message.user_image} key={message.id} />
+                    <MessageRow username={message.User!.username} content={message.content} sentAt={message.created_at} userImage={message.User!.user_image} key={message.id} />
                 ))}
                 <div ref={messagesEndRef}></div>
             </div>
