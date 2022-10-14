@@ -1,5 +1,5 @@
 import { Menu } from "@headlessui/react";
-import { CogIcon } from "@heroicons/react/24/solid";
+import { Cog8ToothIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import { useContext } from "react";
 import { AuthContext } from "../../Auth/AuthProvider";
@@ -27,8 +27,8 @@ const Account = () => {
                 <div className="text-white font-semibold text-sm">{username}</div>
             </div>
             <Menu as="div" className="relative flex items-center">
-                <Menu.Button>
-                    <CogIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                <Menu.Button className='hover:bg-secondary p-2 rounded-lg'>
+                    <Cog8ToothIcon className="h-5 w-5 text-white" aria-hidden="true" />
                 </Menu.Button>
                 <Menu.Items className="absolute origin-bottom-right right-0 bottom-0 mb-8 w-36 rounded-md bg-black shadow-lg ">
                     <Menu.Item>
