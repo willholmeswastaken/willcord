@@ -19,7 +19,7 @@ const UserList = () => {
     enabled: !!server
   });
 
-  console.log(serverUsers);
+  // todo: add grouping as well as crown icon for server creator
 
   return (
     <div className="flex flex-col gap-2">

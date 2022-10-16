@@ -1,12 +1,11 @@
 import { PlusIcon } from '@heroicons/react/24/solid'
-import { useState } from 'react'
+import { useSetAtom } from 'jotai';
+import { createServerModalVisibleAtom } from '../../atoms';
 import AddServerModal from './AddServerModal'
 
 const AddServerItem = () => {
-    const [showAddServerModal, setShowAddServerModal] = useState<boolean>(false);
-
-    const closeModal = () => setShowAddServerModal(false);
-    const showModal = () => setShowAddServerModal(true);
+    const setCreateServerModalVisible = useSetAtom(createServerModalVisibleAtom);
+    const showModal = () => setCreateServerModalVisible(true);
 
     return (
         <>
@@ -17,7 +16,7 @@ const AddServerItem = () => {
                     className="w-12 h-12 rounded-[24px] transition-all hover:rounded-xl bg-secondary hover:bg-green-600 text-green-600 hover:text-white"
                     onClick={showModal}><PlusIcon className='w-7 h-7 m-auto' /></button>
             </div>
-            <AddServerModal show={showAddServerModal} onClose={closeModal} />
+            <AddServerModal />
         </>
     )
 }

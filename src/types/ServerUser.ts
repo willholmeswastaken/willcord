@@ -1,3 +1,4 @@
+import { Server } from "./Server";
 import { WillcordUser } from "./User";
 
 export interface ServerUser {
@@ -7,4 +8,5 @@ export interface ServerUser {
   User?: WillcordUser;
   created_at: Date;
   roles: Array<string>;
+  Server?: Server;
 }

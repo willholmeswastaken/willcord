@@ -1,30 +1,29 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid';
-import { Fragment, useState } from 'react'
+import { useAtom } from 'jotai';
+import { Fragment } from 'react'
+import { createServerModalViewAtom, createServerModalVisibleAtom } from '../../../atoms';
 import CreateServerView from './CreateServerView';
 
-interface AddServerModalProps {
-    show: boolean;
-    onClose: () => void;
-}
 
-type ActiveView = 'initial' | 'create' | 'join';
 
-const AddServerModal = ({ show, onClose }: AddServerModalProps) => {
-    const [activeView, setActiveView] = useState<ActiveView>('initial');
-
-    const setCreateInView = () => setActiveView('create');
+const AddServerModal = () => {
+    const [createServerModalActiveView, setCreateServerModalActiveView] = useAtom(createServerModalViewAtom);
+    const [createServerModalVisible, setCreateServerModalVisible] = useAtom(createServerModalVisibleAtom);
+    const setCreateInView = () => setCreateServerModalActiveView('create');
 
     const closeModal = () => {
-        onClose();
-        setActiveView('initial');
-    }
+        setCreateServerModalVisible(false);
+        setCreateServerModalActiveView('initial');
+    };
 
-    // need a way to animate the height changes in the dialog.
+    const onCreateBack = () => setCreateServerModalActiveView('initial');
+
+    // todo: need a way to animate the height changes in the dialog.
 
     return (
         <>
-            <Transition appear show={show} as={Fragment}>
+            <Transition appear show={createServerModalVisible} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}
@@ -51,7 +50,7 @@ const AddServerModal = ({ show, onClose }: AddServerModalProps) => {
                             >
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-md bg-white text-left align-middle shadow-xl transition-all">
                                     {
-                                        activeView === 'initial' && (
+                                        createServerModalActiveView === 'initial' && (
                                             <>
                                                 <div className="flex flex-col p-6">
                                                     <h3 className="text-2xl text-center font-bold leading-6 text-gray-900">
@@ -80,7 +79,7 @@ const AddServerModal = ({ show, onClose }: AddServerModalProps) => {
                                         )
                                     }
                                     {
-                                        activeView === 'create' && (<CreateServerView />)
+                                        createServerModalActiveView === 'create' && (<CreateServerView onBack={onCreateBack} />)
                                     }
 
                                 </Dialog.Panel>

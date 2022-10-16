@@ -43,10 +43,10 @@ function App() {
 }
 
 function SignedIn() {
-  // todo: supabase mutation to update the user table with latest image etc
   const user = useContext(AuthContext);
   const updateUserMutation = useMutation(
     async () => {
+      // todo: proper error handling
       const { data, error } = await supabaseClient
         .from<WillcordUser>("User")
         .upsert([{ id: user!.id, username: user!.user_metadata.full_name, user_image: user!.user_metadata.picture, last_seen: new Date() }]);

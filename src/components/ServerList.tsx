@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Auth/AuthProvider';
 import supabaseClient from '../supabaseClient'
-import { Server } from '../types/Server';
+import { ServerUser } from '../types/ServerUser';
 import AddServerItem from './Server/AddServerItem';
 import ServerItem from './Server/ServerItem';
 
 const ServerList = () => {
+    const user = useContext(AuthContext);
     const { data: servers } = useQuery(['servers'], async () => {
-        const { data } = await supabaseClient.from<Server>('Server').select('*');
+        const { data } = await supabaseClient.from<ServerUser>('ServerUser').select('*, Server( id, name, created_at, user_id, has_image )').eq('user_id', user!.id);
         return data;
     });
 
@@ -26,8 +29,8 @@ const ServerList = () => {
                 </svg>
             </Link>
             <div className="flex flex-col gap-4 bg-primary rounded-full pr-2">
-                {servers?.map(server => (
-                    <ServerItem key={server.id} server={server} />
+                {servers?.map(serverUser => (
+                    <ServerItem key={serverUser.id} server={serverUser.Server!} />
                 ))}
                 <AddServerItem />
             </div>
