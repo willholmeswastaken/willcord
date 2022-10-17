@@ -37,7 +37,7 @@ const CreateServerView = ({ onBack }: CreateServerViewProps) => {
 
     const addUserToServerMutation = useMutation(
         async (server_id: string) => {
-            const { data, error } = await supabaseClient
+            const { data } = await supabaseClient
                 .from<ServerUser>('ServerUser')
                 .insert([{ user_id: user!.id, server_id }]);
             return data;
@@ -124,9 +124,10 @@ const CreateServerView = ({ onBack }: CreateServerViewProps) => {
                         {...register("name", { required: true })}
                         rows={1}
                         disabled={isCreating}
-                        className="block w-full py-2 px-4 resize-none bg-gray-300 rounded-sm caret-gray-700 text-gray-700 text-md focus:outline-none"
+                        className={`block w-full py-2 px-4 resize-none bg-gray-300 rounded-sm caret-gray-700 text-gray-700 text-md focus:outline-none ${errors.name && 'border-2 border-red-600'}`}
                         defaultValue={defaultServerName}
                     />
+                    {errors.name && <span className="text-red-600 text-xs">You must enter a name for your server</span>}
                     <div className="flex flex-row mt-2">
                         <span className="text-xs text-gray-500">By creating a server, you agree to Willcord's&nbsp;</span>
                         <span className="text-xs text-blue-500">Community Guidelines.</span>
