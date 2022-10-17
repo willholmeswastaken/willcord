@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import supabaseClient from "../../../supabaseClient";
-import MemberDisplay from "./MemberDisplay";
 import Feed from "../Feed";
 import ChannelTitle from "./ChannelTitle";
 import { lastSeenChannelAtom } from "../../../atoms";
@@ -35,7 +34,7 @@ const ChannelDisplay = () => {
                 <div className="flex-1 px-4">
                     <Feed />
                 </div>
-                <div className="w-48 bg-secondary py-6 px-4">
+                <div className="w-56 bg-secondary py-6 px-4">
                     <UserList />
                 </div>
             </div>
