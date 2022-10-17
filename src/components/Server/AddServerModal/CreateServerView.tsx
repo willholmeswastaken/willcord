@@ -48,37 +48,38 @@ const CreateServerView = ({ onBack }: CreateServerViewProps) => {
     );
 
     const onSubmit = async ({ name, image }: CreateServerInputFormProps) => {
-        // todo: tidy up error handling.
-
         setIsCreating(true);
+
         const { data: serverResponse } = await supabaseClient
             .from<Server>('Server')
             .insert([{ name, user_id: user!.id }]);
 
         const serverId = serverResponse![0].id;
+        const tasks = [];
 
         if (image && image.length > 0) {
-            const { data: imageResponse, error } = await supabaseClient
+            tasks.push(supabaseClient
                 .storage
                 .from('servers')
                 .upload(serverId, image[0], {
                     cacheControl: '3600',
                     upsert: false
-                });
-
-            await supabaseClient
+                }));
+            tasks.push(supabaseClient
                 .from('Server')
                 .update([{ has_image: true }])
-                .eq('id', serverId);
+                .eq('id', serverId));
         }
-
-        await supabaseClient
+        tasks.push(supabaseClient
             .from<Channel>('Channel')
-            .insert([{ name: 'general', server_id: serverId, user_id: user!.id }]);
+            .insert([{ name: 'general', server_id: serverId, user_id: user!.id }]));
 
+        await Promise.all(tasks);
         addUserToServerMutation.mutate(serverId);
+
         setCreateServerModalVisible(false);
         setIsCreating(false);
+
         navigate(`/${serverId}`);
         setCreateServerModalActiveView('initial');
     };
