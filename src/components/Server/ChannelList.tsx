@@ -27,7 +27,7 @@ export function ChannelList() {
     }, [channel, data]);
 
     return (
-        <div className="flex flex-col gap-1 w-full">
+        <div className="flex flex-col gap-1 w-full px-2 mt-1">
             {data?.map((channel) => (
                 <NavLink
                     onClick={() => setLastSeenChannelAtom(channel)}

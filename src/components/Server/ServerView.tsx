@@ -30,7 +30,7 @@ const ServerView = () => {
     return (
         <>
             <div className="flex flex-col relative flex-shrink-0 w-60 h-screen overflow-y-auto bg-secondary">
-                <div className="flex flex-col px-2">
+                <div className="flex flex-col">
                     <ServerHeader name={currentServer?.name} />
                     <ChannelList />
                 </div>

@@ -32,17 +32,12 @@ const Account = () => {
                 </Menu.Button>
                 <Menu.Items className="absolute origin-bottom-right right-0 bottom-0 mb-8 w-36 rounded-md bg-black shadow-lg ">
                     <Menu.Item>
-                        {({ active }: Test) => (
-                            <button
-                                onClick={signOut}
-                                className={clsx(
-                                    active && "bg-primary",
-                                    "group flex text-white w-full items-center rounded-md px-2 py-2 text-sm"
-                                )}
-                            >
-                                Sign Out
-                            </button>
-                        )}
+                        <button
+                            onClick={signOut}
+                            className="bg-primary hover:bg-tertiary group flex text-white w-full items-center rounded-md px-2 py-2 text-sm"
+                        >
+                            Sign Out
+                        </button>
                     </Menu.Item>
                 </Menu.Items>
             </Menu>
