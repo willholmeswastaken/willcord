@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { ChannelList } from './ChannelList';
 import Account from './Account';
@@ -9,9 +9,11 @@ import { Server } from '../../types/Server';
 import { useAtom } from 'jotai';
 import { lastSeenServerAtom } from '../../atoms';
 import ServerHeader from './ServerHeader';
+import { AuthContext } from '../../Auth/AuthProvider';
 
 const ServerView = () => {
     const { server } = useParams();
+    const user = useContext(AuthContext);
     const [currentServer, setCurrentServer] = useAtom(lastSeenServerAtom);
     const { data: dbServer } = useQuery([server, 'server-full'], async () => {
         const { data } = await supabaseClient
@@ -22,6 +24,8 @@ const ServerView = () => {
         return data;
     });
 
+    const isUserServerAdmin = useMemo(() => user?.id === currentServer?.user_id, [user?.id, currentServer?.user_id]);
+
     useEffect(() => {
         if (dbServer && dbServer.id !== currentServer?.id)
             setCurrentServer(dbServer);
@@ -31,7 +35,7 @@ const ServerView = () => {
         <>
             <div className="flex flex-col relative flex-shrink-0 w-60 h-screen overflow-y-auto bg-secondary">
                 <div className="flex flex-col">
-                    <ServerHeader name={currentServer?.name} />
+                    <ServerHeader name={currentServer?.name} currentUserIsServerAdmin={isUserServerAdmin} />
                     <ChannelList />
                 </div>
 

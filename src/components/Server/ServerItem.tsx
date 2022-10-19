@@ -44,8 +44,8 @@ const ServerItem = ({ server }: ServerItemProps) => {
             >
                 {
                     server.has_image
-                        ? (<img src={serverImageSrc!} className='w-full h-full rounded-[24px] hover:rounded-xl transition-all' />)
-                        : (<div className='w-full h-full transition-all rounded-[24px] hover:rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>&nbsp;</div>)
+                        ? (<img src={serverImageSrc!} className={`w-full h-full ${isServerCurrent ? 'rounded-xl' : 'rounded-[24px]'} hover:rounded-xl transition-all`} />)
+                        : (<div className={`w-full h-full transition-all ${isServerCurrent ? 'rounded-xl' : 'rounded-[24px]'} hover:rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500`}>&nbsp;</div>)
                 }
             </Link>
         </div>
