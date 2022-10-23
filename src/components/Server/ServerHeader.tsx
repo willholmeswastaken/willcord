@@ -1,5 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ArrowLeftCircleIcon, ChevronDownIcon, Cog8ToothIcon, PlusCircleIcon, UserPlusIcon } from '@heroicons/react/24/solid'
+import { useMemo, useState } from 'react';
+import LeaveServerModal from './LeaveServerModal';
 
 interface ServerHeaderProps {
     name?: string;
@@ -40,29 +42,50 @@ const serverHeaderMenuItems: Array<ServerHeaderMenuItem> = [
 ]
 
 const ServerHeader = ({ name, currentUserIsServerAdmin }: ServerHeaderProps) => {
-    const menuItemsToDisplay = currentUserIsServerAdmin
-        ? serverHeaderMenuItems
-        : serverHeaderMenuItems.filter(x => !x.restrictedToAdmin);
+    const [showLeaveServerModal, setShowLeaveServerModal] = useState<boolean>(false);
+    const onCloseLeaveServerModal = () => setShowLeaveServerModal(false);
+
+    const menuItemsToDisplay = useMemo(() => {
+        const items = currentUserIsServerAdmin
+            ? serverHeaderMenuItems
+            : serverHeaderMenuItems.filter(x => !x.restrictedToAdmin);
+
+        return items.map(x => {
+            if (x.name === 'Leave Server')
+                return {
+                    ...x,
+                    onClick: () => {
+                        setShowLeaveServerModal(true);
+                    }
+                }
+            return x;
+        });
+    }, [currentUserIsServerAdmin]);
 
     return (
-        <Menu as="div" className="relative flex items-center hover:bg-tertiary border-b shadow-2xl border-primary">
-            <Menu.Button className='flex flex-row justify-between items-center px-3 pt-2 pb-[0.75rem] w-full'>
-                <div className="font-bold text-white">{name}</div>
-                <ChevronDownIcon className="h-5 w-5 text-white" aria-hidden="true" />
-            </Menu.Button>
-            <Menu.Items as='div' className="absolute origin-bottom-right right-0 left-2 bottom-0 top-12 mb-8 w-56 h-fit py-4 px-2 rounded-md bg-[#18191c] shadow-lg">
-                {
-                    menuItemsToDisplay.map(x => (
-                        <Menu.Item>
-                            <button className={`hover:bg-indigo-500 group flex justify-between flex-row ${x.textColor ?? 'text-gray-300'} font-medium hover:text-white w-full items-center rounded-md px-2 py-2 text-sm mb-2`}>
-                                <span>{x.name}</span>
-                                <span>{x.icon}</span>
-                            </button>
-                        </Menu.Item>
-                    ))
-                }
-            </Menu.Items>
-        </Menu>
+        <>
+            <Menu as="div" className="relative flex items-center hover:bg-tertiary border-b shadow-2xl border-primary">
+                <Menu.Button className='flex flex-row justify-between items-center px-3 pt-2 pb-[0.75rem] w-full'>
+                    <div className="font-bold text-white">{name}</div>
+                    <ChevronDownIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                </Menu.Button>
+                <Menu.Items as='div' className="absolute origin-bottom-right right-0 left-2 bottom-0 top-12 mb-8 w-56 h-fit py-4 px-2 rounded-md bg-[#18191c] shadow-lg">
+                    {
+                        menuItemsToDisplay.map(x => (
+                            <Menu.Item key={x.name}>
+                                <button
+                                    className={`hover:bg-indigo-500 group flex justify-between flex-row ${x.textColor ?? 'text-gray-300'} font-medium hover:text-white w-full items-center rounded-md px-2 py-2 text-sm mb-2`}
+                                    onClick={x.onClick}>
+                                    <span>{x.name}</span>
+                                    <span>{x.icon}</span>
+                                </button>
+                            </Menu.Item>
+                        ))
+                    }
+                </Menu.Items>
+            </Menu>
+            <LeaveServerModal open={showLeaveServerModal} onClose={onCloseLeaveServerModal} />
+        </>
     )
 }
 

@@ -12,8 +12,8 @@ import ServerHeader from './ServerHeader';
 import { AuthContext } from '../../Auth/AuthProvider';
 
 const ServerView = () => {
-    const { server } = useParams();
     const user = useContext(AuthContext);
+    const { server } = useParams();
     const [currentServer, setCurrentServer] = useAtom(lastSeenServerAtom);
     const { data: dbServer } = useQuery([server, 'server-full'], async () => {
         const { data } = await supabaseClient
@@ -27,9 +27,9 @@ const ServerView = () => {
     const isUserServerAdmin = useMemo(() => user?.id === currentServer?.user_id, [user?.id, currentServer?.user_id]);
 
     useEffect(() => {
-        if (dbServer && dbServer.id !== currentServer?.id)
+        if ((!currentServer && dbServer) || (dbServer && dbServer.id !== currentServer?.id))
             setCurrentServer(dbServer);
-    }, [dbServer, currentServer])
+    }, [dbServer, currentServer]);
 
     return (
         <>

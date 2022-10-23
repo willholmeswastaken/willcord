@@ -7,3 +7,4 @@ export const lastSeenChannelAtom = atom<Channel | null>(null);
 export const lastSeenServerAtom = atom<Server | null>(null);
 export const createServerModalVisibleAtom = atom<boolean>(false);
 export const createServerModalViewAtom = atom<ActiveView>("initial");
+export const currentServers = atom<Array<Server>>([]);
