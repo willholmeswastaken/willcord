@@ -1,27 +1,32 @@
 import React, { useContext, useEffect, useMemo } from 'react'
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { ChannelList } from './ChannelList';
 import Account from './Account';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import supabaseClient from '../../supabaseClient';
-import { Server } from '../../types/Server';
 import { useAtom } from 'jotai';
 import { lastSeenServerAtom } from '../../atoms';
 import ServerHeader from './ServerHeader';
 import { AuthContext } from '../../Auth/AuthProvider';
+import { ServerUser } from '../../types/ServerUser';
 
 const ServerView = () => {
     const user = useContext(AuthContext);
     const { server } = useParams();
+    const navigate = useNavigate();
     const [currentServer, setCurrentServer] = useAtom(lastSeenServerAtom);
     const { data: dbServer } = useQuery([server, 'server-full'], async () => {
-        const { data } = await supabaseClient
-            .from<Server>("Server")
-            .select("*")
-            .eq("id", server!).single();
+        const { data, status } = await supabaseClient
+            .from<ServerUser>("ServerUser")
+            .select("id, Server ( id, name, user_id, has_image )")
+            .eq("server_id", server!).single();
 
-        return data;
+        if (status !== 200) {
+            navigate('/server-not-found');
+            return;
+        }
+
+        return data?.Server;
     });
 
     const isUserServerAdmin = useMemo(() => user?.id === currentServer?.user_id, [user?.id, currentServer?.user_id]);

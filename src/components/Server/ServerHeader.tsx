@@ -1,6 +1,7 @@
 import { Menu } from '@headlessui/react';
 import { ArrowLeftCircleIcon, ChevronDownIcon, Cog8ToothIcon, PlusCircleIcon, UserPlusIcon } from '@heroicons/react/24/solid'
 import { useMemo, useState } from 'react';
+import CreateChannelModal from './CreateChannelModal';
 import LeaveServerModal from './LeaveServerModal';
 
 interface ServerHeaderProps {
@@ -41,9 +42,11 @@ const serverHeaderMenuItems: Array<ServerHeaderMenuItem> = [
     }
 ]
 
+type OpenModal = "leaveServer" | "createChannel" | "none";
+
 const ServerHeader = ({ name, currentUserIsServerAdmin }: ServerHeaderProps) => {
-    const [showLeaveServerModal, setShowLeaveServerModal] = useState<boolean>(false);
-    const onCloseLeaveServerModal = () => setShowLeaveServerModal(false);
+    const [activeModal, setActiveModal] = useState<OpenModal>("none");
+    const onCloseModal = () => setActiveModal("none");
 
     const menuItemsToDisplay = useMemo(() => {
         const items = currentUserIsServerAdmin
@@ -51,14 +54,24 @@ const ServerHeader = ({ name, currentUserIsServerAdmin }: ServerHeaderProps) => 
             : serverHeaderMenuItems.filter(x => !x.restrictedToAdmin);
 
         return items.map(x => {
-            if (x.name === 'Leave Server')
-                return {
-                    ...x,
-                    onClick: () => {
-                        setShowLeaveServerModal(true);
-                    }
-                }
-            return x;
+            switch (x.name) {
+                case 'Leave Server':
+                    return {
+                        ...x,
+                        onClick: () => {
+                            setActiveModal("leaveServer");
+                        }
+                    };
+                case 'Create Channel':
+                    return {
+                        ...x,
+                        onClick: () => {
+                            setActiveModal("createChannel");
+                        }
+                    };
+                default:
+                    return x;
+            }
         });
     }, [currentUserIsServerAdmin]);
 
@@ -84,7 +97,8 @@ const ServerHeader = ({ name, currentUserIsServerAdmin }: ServerHeaderProps) => 
                     }
                 </Menu.Items>
             </Menu>
-            <LeaveServerModal open={showLeaveServerModal} onClose={onCloseLeaveServerModal} />
+            <LeaveServerModal open={activeModal === "leaveServer"} onClose={onCloseModal} />
+            <CreateChannelModal open={activeModal === 'createChannel'} onClose={onCloseModal} />
         </>
     )
 }
