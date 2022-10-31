@@ -11,6 +11,8 @@ import supabaseClient from './supabaseClient';
 import { useContext, useEffect } from 'react';
 import { WillcordUser } from './types/User';
 
+import './App.css';
+
 export const queryClient = new QueryClient();
 
 function App() {
