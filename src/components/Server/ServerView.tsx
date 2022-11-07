@@ -9,6 +9,7 @@ import { lastSeenServerAtom } from '../../atoms';
 import ServerHeader from './ServerHeader';
 import { AuthContext } from '../../Auth/AuthProvider';
 import { ServerUser } from '../../types/ServerUser';
+import { queryClient } from '../../App';
 
 const ServerView = () => {
     const user = useContext(AuthContext);
@@ -34,6 +35,7 @@ const ServerView = () => {
     useEffect(() => {
         if ((!currentServer && dbServer) || (dbServer && dbServer.id !== currentServer?.id))
             setCurrentServer(dbServer);
+        queryClient.invalidateQueries(['server:channels']);
     }, [dbServer, currentServer]);
 
     return (

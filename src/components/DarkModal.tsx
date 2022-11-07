@@ -4,7 +4,7 @@ import React, { Fragment } from 'react'
 interface DarkModalProps {
     headerTitle: string;
     children: React.ReactNode;
-    buttons: React.ReactNode;
+    buttons?: React.ReactNode;
     open: boolean;
     onClose: () => void;
 }

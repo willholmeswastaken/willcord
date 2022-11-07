@@ -37,13 +37,15 @@ const CreateServerView = ({ onBack }: CreateServerViewProps) => {
 
     const addUserToServerMutation = useMutation(
         async (server_id: string) => {
-            const { data } = await supabaseClient
+            await supabaseClient
                 .from<ServerUser>('ServerUser')
                 .insert([{ user_id: user!.id, server_id }]);
-            return data;
         },
         {
-            onSuccess: () => queryClient.invalidateQueries(['servers']),
+            onSuccess: () => {
+                queryClient.invalidateQueries(['servers']);
+                queryClient.invalidateQueries(['server:channels']);
+            },
         }
     );
 

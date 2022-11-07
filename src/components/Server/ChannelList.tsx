@@ -12,7 +12,7 @@ export function ChannelList() {
     const navigate = useNavigate();
     const setLastSeenChannelAtom = useSetAtom(lastSeenChannelAtom);
 
-    const { data } = useQuery([`${server}:channels`], async () => {
+    const { data } = useQuery(['server:channels'], async () => {
         const { data } = await supabaseClient
             .from<Channel>("Channel")
             .select("*")
