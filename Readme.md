@@ -1,7 +1,20 @@
-What do I need to do?
+# Willcord
 
-1. Refactor the messaging code to be cleaner.
-2. Pre-select the first channel in a server or the last visited channel when a server is selected.
-3. Pull through a users image when a message is sent from them.
-4. Add a Users-Servers table to allow users to join servers and the list is pulled from this table based upon the user_id
-5. Display all users in a server.
+## What is this
+A discord clone built with Vite, Tailwindcss, Supabase, Typescript.
+
+## What's the status?
+Lots of func built:
+1. Server listing
+2. Server addition
+3. Channel listing
+4. Leave server
+5. Channel addition
+6. Send message
+7. Message feed
+
+However, i've worked on this for some time now and have done what I set to achieve with this app.
+
+I wanted to practice my skills with technologies such as react-query, supabase and tailwind.
+
+I will now take my learnings forward to my next project.
